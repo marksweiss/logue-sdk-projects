@@ -1,0 +1,191 @@
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+SRAM             0x0000000020017800 0x0000000000001800 xr
+SDRAM            0x00000000c0400000 0x0000000000020000 rw
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+LOAD ./build/obj/_unit.o
+
+.hooks          0x0000000020017800       0x40
+                0x0000000020017800                . = ALIGN (0x4)
+                0x0000000020017800                _hooks_start = .
+ *(.hooks)
+ .hooks         0x0000000020017800       0x40 ./build/obj/_unit.o
+                0x0000000020017840                . = ALIGN (0x4)
+                0x0000000020017840                _hooks_end = .
+
+.init_array     0x0000000020017840        0x0
+                0x0000000020017840                . = ALIGN (0x4)
+                0x0000000020017840                PROVIDE (__init_array_start, .)
+ *(SORT(.init_array.*))
+ *(.init_array*)
+                0x0000000020017840                . = ALIGN (0x4)
+                0x0000000020017840                PROVIDE (__init_array_end, .)
+
+.text           0x0000000020017840       0x5c
+                0x0000000020017840                . = ALIGN (0x4)
+                0x0000000020017840                _text_start = .
+ *(.text)
+ .text          0x0000000020017840       0x5c ./build/obj/_unit.o
+                0x0000000020017840                _hook_process
+                0x0000000020017842                _hook_resume
+                0x0000000020017844                _hook_param
+                0x0000000020017846                _hook_suspend
+                0x0000000020017848                _hook_init
+                0x000000002001784a                _entry
+ *(.text.*)
+ *(.glue_7)
+ .glue_7        0x000000002001789c        0x0 linker stubs
+ *(.glue_7t)
+ .glue_7t       0x000000002001789c        0x0 linker stubs
+ *(.gcc*)
+                0x000000002001789c                . = ALIGN (0x4)
+                0x000000002001789c                _text_end = .
+
+.vfp11_veneer   0x000000002001789c        0x0
+ .vfp11_veneer  0x000000002001789c        0x0 linker stubs
+
+.v4_bx          0x000000002001789c        0x0
+ .v4_bx         0x000000002001789c        0x0 linker stubs
+
+.iplt           0x000000002001789c        0x0
+ .iplt          0x000000002001789c        0x0 ./build/obj/_unit.o
+
+.rel.dyn        0x000000002001789c        0x0
+ .rel.iplt      0x000000002001789c        0x0 ./build/obj/_unit.o
+
+.rodata         0x000000002001789c        0x0
+                0x000000002001789c                . = ALIGN (0x4)
+                0x000000002001789c                _rodata_start = .
+ *(.rodata)
+ *(.rodata.*)
+                0x000000002001789c                . = ALIGN (0x4)
+                0x000000002001789c                _rodata_end = .
+
+.data           0x00000000200178a0        0x0
+                0x00000000200178a0                . = ALIGN (0x8)
+                0x00000000200178a0                _data_start = .
+ *(.data)
+ .data          0x00000000200178a0        0x0 ./build/obj/_unit.o
+ *(.data.*)
+                0x00000000200178a0                . = ALIGN (0x8)
+                0x00000000200178a0                _data_end = .
+
+.igot.plt       0x00000000200178a0        0x0
+ .igot.plt      0x00000000200178a0        0x0 ./build/obj/_unit.o
+
+.bss            0x00000000200178a0        0x0
+                0x00000000200178a0                . = ALIGN (0x4)
+                0x00000000200178a0                _bss_start = .
+ *(.bss)
+ .bss           0x00000000200178a0        0x0 ./build/obj/_unit.o
+ *(.bss.*)
+ *(COMMON)
+                0x00000000200178a0                . = ALIGN (0x4)
+                0x00000000200178a0                _bss_end = .
+
+.ARM.extab      0x00000000200178a0        0x0
+                0x00000000200178a0                . = ALIGN (0x4)
+                0x00000000200178a0                __extab_start = .
+ *(.ARM.extab* .gnu.linkonce.armextab.*)
+                0x00000000200178a0                . = ALIGN (0x4)
+                0x00000000200178a0                __extab_end = .
+
+.ARM.exidx      0x00000000200178a0        0x0
+                0x00000000200178a0                __exidx_start = .
+ *(.ARM.exidx* .gnu.linkonce.armexidx.*)
+                0x00000000200178a0                __exidx_end = .
+
+.eh_frame_hdr   0x00000000200178a0        0x0
+                0x00000000200178a0                . = ALIGN (0x4)
+                0x00000000200178a0                _eh_frame_hdr_start = .
+ *(.eh_frame_hdr)
+                0x00000000200178a0                . = ALIGN (0x4)
+                0x00000000200178a0                _eh_frame_hdr_end = .
+
+.eh_frame       0x00000000200178a0        0x0
+                0x00000000200178a0                . = ALIGN (0x4)
+                0x00000000200178a0                _eh_frame_start = .
+ *(.eh_frame)
+                0x00000000200178a0                . = ALIGN (0x4)
+                0x00000000200178a0                _eh_frame_end = .
+
+.sdram          0x00000000c0400000        0x0
+                0x00000000c0400000                . = ALIGN (0x4)
+                0x00000000c0400000                _usr_sdram_start = .
+ *(.sdram*)
+                0x00000000c0400000                . = ALIGN (0x4)
+                0x00000000c0400000                _usr_sdram_end = .
+LOAD ./ld/main_api.syms
+                0x000000000807b000                k_fx_api_version = 0x807b000
+                0x000000000807b004                k_fx_api_platform = 0x807b004
+                0x000000000807b100                sqrtm2log_lut_f = 0x807b100
+                0x000000000807b504                tanpi_lut_f = 0x807b504
+                0x000000000807b908                log_lut_f = 0x807b908
+                0x000000000807bd0c                bitres_lut_f = 0x807bd0c
+                0x000000000807bf10                wt_sine_lut_f = 0x807bf10
+                0x000000000807c114                schetzen_lut_f = 0x807c114
+                0x000000000807c318                cubicsat_lut_f = 0x807c318
+                0x000000000807c51c                pow2_lut_f = 0x807c51c
+                0x000000000807c920                _fx_mcu_hash = 0x807c920
+                0x000000000807c92c                _fx_rand = 0x807c92c
+                0x000000000807c964                _fx_white = 0x807c964
+                0x000000000807ca88                _fx_get_bpm = 0x807ca88
+                0x000000000807ca8c                _fx_get_bpmf = 0x807ca8c
+LOAD /Users/markweiss/Documents/projects/logue-sdk-projects/tools/gcc/gcc-arm-none-eabi-5_4-2016q3/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7e-m/fpu/libm.a
+START GROUP
+LOAD /Users/markweiss/Documents/projects/logue-sdk-projects/tools/gcc/gcc-arm-none-eabi-5_4-2016q3/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7e-m/fpu/libgcc.a
+LOAD /Users/markweiss/Documents/projects/logue-sdk-projects/tools/gcc/gcc-arm-none-eabi-5_4-2016q3/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7e-m/fpu/libg.a
+LOAD /Users/markweiss/Documents/projects/logue-sdk-projects/tools/gcc/gcc-arm-none-eabi-5_4-2016q3/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7e-m/fpu/libc.a
+END GROUP
+OUTPUT(build/modfx_random.elf elf32-littlearm)
+
+.debug_info     0x0000000000000000      0x55d
+ .debug_info    0x0000000000000000      0x55d ./build/obj/_unit.o
+
+.debug_abbrev   0x0000000000000000      0x1f4
+ .debug_abbrev  0x0000000000000000      0x1f4 ./build/obj/_unit.o
+
+.debug_loc      0x0000000000000000       0xb9
+ .debug_loc     0x0000000000000000       0xb9 ./build/obj/_unit.o
+
+.debug_aranges  0x0000000000000000       0x20
+ .debug_aranges
+                0x0000000000000000       0x20 ./build/obj/_unit.o
+
+.debug_line     0x0000000000000000      0x21f
+ .debug_line    0x0000000000000000      0x21f ./build/obj/_unit.o
+
+.debug_str      0x0000000000000000      0x56e
+ .debug_str     0x0000000000000000      0x56e ./build/obj/_unit.o
+                                        0x5d8 (size before relaxing)
+
+.comment        0x0000000000000000       0x6e
+ .comment       0x0000000000000000       0x6e ./build/obj/_unit.o
+                                         0x6f (size before relaxing)
+
+.ARM.attributes
+                0x0000000000000000       0x39
+ .ARM.attributes
+                0x0000000000000000       0x39 ./build/obj/_unit.o
+
+.debug_frame    0x0000000000000000       0x88
+ .debug_frame   0x0000000000000000       0x88 ./build/obj/_unit.o
+
+Cross Reference Table
+
+Symbol                                            File
+__init_array_end                                  ./build/obj/_unit.o
+__init_array_start                                ./build/obj/_unit.o
+_bss_end                                          ./build/obj/_unit.o
+_bss_start                                        ./build/obj/_unit.o
+_entry                                            ./build/obj/_unit.o
+_hook_init                                        ./build/obj/_unit.o
+_hook_param                                       ./build/obj/_unit.o
+_hook_process                                     ./build/obj/_unit.o
+_hook_resume                                      ./build/obj/_unit.o
+_hook_suspend                                     ./build/obj/_unit.o
