@@ -1,0 +1,248 @@
+
+Discarded input sections
+
+ .group         0x0000000000000000        0x8 ./build/obj/waves.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+SRAM             0x0000000020000000 0x0000000000008000 xr
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+LOAD ./build/obj/_unit.o
+LOAD ./build/obj/waves.o
+
+.hooks          0x0000000020000000       0x40
+                0x0000000020000000                . = ALIGN (0x4)
+                0x0000000020000000                _hooks_start = .
+ *(.hooks)
+ .hooks         0x0000000020000000       0x40 ./build/obj/_unit.o
+                0x0000000020000040                . = ALIGN (0x4)
+                0x0000000020000040                _hooks_end = .
+
+.init_array     0x0000000020000040        0x4
+                0x0000000020000040                . = ALIGN (0x4)
+                0x0000000020000040                PROVIDE (__init_array_start, .)
+ *(SORT(.init_array.*))
+ *(.init_array*)
+ .init_array    0x0000000020000040        0x4 ./build/obj/waves.o
+                0x0000000020000044                . = ALIGN (0x4)
+                0x0000000020000044                PROVIDE (__init_array_end, .)
+
+.text           0x0000000020000048      0x7b8
+                0x0000000020000048                . = ALIGN (0x4)
+                0x0000000020000048                _text_start = .
+ *(.text)
+ .text          0x0000000020000048       0x60 ./build/obj/_unit.o
+                0x000000002000004a                _hook_mute
+                0x000000002000004c                _hook_value
+                0x0000000020000056                _entry
+ .text          0x00000000200000a8      0x5fc ./build/obj/waves.o
+                0x00000000200000a8                _hook_init
+                0x00000000200000aa                _hook_cycle
+                0x000000002000050e                _hook_on
+                0x0000000020000524                _hook_off
+                0x0000000020000526                _hook_param
+ *(.text.*)
+ .text._ZN5Waves5StateC2Ev
+                0x00000000200006a4       0x60 ./build/obj/waves.o
+                0x00000000200006a4                Waves::State::State()
+                0x00000000200006a4                Waves::State::State()
+ .text.startup  0x0000000020000704       0xf4 ./build/obj/waves.o
+ .text.startup.__stub
+                0x00000000200007f8        0x8 linker stubs
+ *(.glue_7)
+ .glue_7        0x0000000020000800        0x0 linker stubs
+ *(.glue_7t)
+ .glue_7t       0x0000000020000800        0x0 linker stubs
+ *(.gcc*)
+                0x0000000020000800                . = ALIGN (0x4)
+                0x0000000020000800                _text_end = .
+
+.vfp11_veneer   0x0000000020000800        0x0
+ .vfp11_veneer  0x0000000020000800        0x0 linker stubs
+
+.v4_bx          0x0000000020000800        0x0
+ .v4_bx         0x0000000020000800        0x0 linker stubs
+
+.iplt           0x0000000020000800        0x0
+ .iplt          0x0000000020000800        0x0 ./build/obj/_unit.o
+
+.rel.dyn        0x0000000020000800        0x0
+ .rel.iplt      0x0000000020000800        0x0 ./build/obj/_unit.o
+
+.rodata         0x0000000020000800        0x0
+                0x0000000020000800                . = ALIGN (0x4)
+                0x0000000020000800                _rodata_start = .
+ *(.rodata)
+ *(.rodata.*)
+                0x0000000020000800                . = ALIGN (0x4)
+                0x0000000020000800                _rodata_end = .
+
+.data           0x0000000020000800        0x0
+                0x0000000020000800                . = ALIGN (0x8)
+                0x0000000020000800                _data_start = .
+ *(.data)
+ .data          0x0000000020000800        0x0 ./build/obj/_unit.o
+ .data          0x0000000020000800        0x0 ./build/obj/waves.o
+ *(.data.*)
+                0x0000000020000800                . = ALIGN (0x8)
+                0x0000000020000800                _data_end = .
+
+.igot.plt       0x0000000020000800        0x0
+ .igot.plt      0x0000000020000800        0x0 ./build/obj/_unit.o
+
+.bss            0x0000000020000800       0x90
+                0x0000000020000800                . = ALIGN (0x4)
+                0x0000000020000800                _bss_start = .
+ *(.bss)
+ .bss           0x0000000020000800        0x0 ./build/obj/_unit.o
+ .bss           0x0000000020000800       0x90 ./build/obj/waves.o
+ *(.bss.*)
+ *(COMMON)
+                0x0000000020000890                . = ALIGN (0x4)
+                0x0000000020000890                _bss_end = .
+
+.ARM.extab      0x0000000020000890        0x0
+                0x0000000020000890                . = ALIGN (0x4)
+                0x0000000020000890                __extab_start = .
+ *(.ARM.extab* .gnu.linkonce.armextab.*)
+                0x0000000020000890                . = ALIGN (0x4)
+                0x0000000020000890                __extab_end = .
+
+.ARM.exidx      0x0000000020000890        0x0
+                0x0000000020000890                __exidx_start = .
+ *(.ARM.exidx* .gnu.linkonce.armexidx.*)
+                0x0000000020000890                __exidx_end = .
+
+.eh_frame_hdr   0x0000000020000890        0x0
+                0x0000000020000890                . = ALIGN (0x4)
+                0x0000000020000890                _eh_frame_hdr_start = .
+ *(.eh_frame_hdr)
+                0x0000000020000890                . = ALIGN (0x4)
+                0x0000000020000890                _eh_frame_hdr_end = .
+
+.eh_frame       0x0000000020000890        0x0
+                0x0000000020000890                . = ALIGN (0x4)
+                0x0000000020000890                _eh_frame_start = .
+ *(.eh_frame)
+                0x0000000020000890                . = ALIGN (0x4)
+                0x0000000020000890                _eh_frame_end = .
+LOAD ./ld/osc_api.syms
+                0x000000000800f000                k_osc_api_version = 0x800f000
+                0x000000000800f004                k_osc_api_platform = 0x800f004
+                0x000000000800f100                midi_to_hz_lut_f = 0x800f100
+                0x000000000800f360                sqrtm2log_lut_f = 0x800f360
+                0x000000000800f764                tanpi_lut_f = 0x800f764
+                0x000000000800fb68                log_lut_f = 0x800fb68
+                0x000000000800ff6c                bitres_lut_f = 0x800ff6c
+                0x0000000008010170                wt_par_lut_f = 0x8010170
+                0x0000000008010f8c                wt_par_notes = 0x8010f8c
+                0x0000000008010f94                wt_sqr_lut_f = 0x8010f94
+                0x0000000008011db0                wt_sqr_notes = 0x8011db0
+                0x0000000008011db8                wt_saw_lut_f = 0x8011db8
+                0x0000000008012bd4                wt_saw_notes = 0x8012bd4
+                0x0000000008012bdc                wt_sine_lut_f = 0x8012bdc
+                0x0000000008012de0                schetzen_lut_f = 0x8012de0
+                0x0000000008012fe4                cubicsat_lut_f = 0x8012fe4
+                0x00000000080131e8                wavesA = 0x80131e8
+                0x000000000801546c                wavesB = 0x801546c
+                0x00000000080174ec                wavesC = 0x80174ec
+                0x000000000801915c                wavesD = 0x801915c
+                0x000000000801abc4                wavesE = 0x801abc4
+                0x000000000801ca3c                wavesF = 0x801ca3c
+                0x000000000801eabc                _osc_mcu_hash = 0x801eabc
+                0x000000000801eac8                _osc_bl_saw_idx = 0x801eac8
+                0x000000000801ebb0                _osc_bl_sqr_idx = 0x801ebb0
+                0x000000000801ec98                _osc_bl_par_idx = 0x801ec98
+                0x000000000801ed80                _osc_rand = 0x801ed80
+                0x000000000801edb8                _osc_white = 0x801edb8
+LOAD /Users/markweiss/Documents/projects/logue-sdk/tools/gcc/gcc-arm-none-eabi-5_4-2016q3/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7e-m/fpu/libm.a
+START GROUP
+LOAD /Users/markweiss/Documents/projects/logue-sdk/tools/gcc/gcc-arm-none-eabi-5_4-2016q3/bin/../lib/gcc/arm-none-eabi/5.4.1/armv7e-m/fpu/libgcc.a
+LOAD /Users/markweiss/Documents/projects/logue-sdk/tools/gcc/gcc-arm-none-eabi-5_4-2016q3/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7e-m/fpu/libg.a
+LOAD /Users/markweiss/Documents/projects/logue-sdk/tools/gcc/gcc-arm-none-eabi-5_4-2016q3/bin/../lib/gcc/arm-none-eabi/5.4.1/../../../../arm-none-eabi/lib/armv7e-m/fpu/libc.a
+END GROUP
+OUTPUT(build/waves.elf elf32-littlearm)
+
+.debug_info     0x0000000000000000     0x22c3
+ .debug_info    0x0000000000000000      0x6a4 ./build/obj/_unit.o
+ .debug_info    0x00000000000006a4     0x1c1f ./build/obj/waves.o
+
+.debug_abbrev   0x0000000000000000      0x6d3
+ .debug_abbrev  0x0000000000000000      0x20e ./build/obj/_unit.o
+ .debug_abbrev  0x000000000000020e      0x4c5 ./build/obj/waves.o
+
+.debug_loc      0x0000000000000000      0xfd1
+ .debug_loc     0x0000000000000000       0xb9 ./build/obj/_unit.o
+ .debug_loc     0x00000000000000b9      0xf18 ./build/obj/waves.o
+
+.debug_aranges  0x0000000000000000       0x50
+ .debug_aranges
+                0x0000000000000000       0x20 ./build/obj/_unit.o
+ .debug_aranges
+                0x0000000000000020       0x30 ./build/obj/waves.o
+
+.debug_line     0x0000000000000000      0x7b0
+ .debug_line    0x0000000000000000      0x218 ./build/obj/_unit.o
+ .debug_line    0x0000000000000218      0x598 ./build/obj/waves.o
+
+.debug_str      0x0000000000000000      0xf7c
+ .debug_str     0x0000000000000000      0x5cf ./build/obj/_unit.o
+                                        0x65c (size before relaxing)
+ .debug_str     0x00000000000005cf      0x9ad ./build/obj/waves.o
+                                        0xd44 (size before relaxing)
+
+.comment        0x0000000000000000       0x6e
+ .comment       0x0000000000000000       0x6e ./build/obj/_unit.o
+                                         0x6f (size before relaxing)
+ .comment       0x000000000000006e       0x6f ./build/obj/waves.o
+
+.ARM.attributes
+                0x0000000000000000       0x39
+ .ARM.attributes
+                0x0000000000000000       0x39 ./build/obj/_unit.o
+ .ARM.attributes
+                0x0000000000000039       0x39 ./build/obj/waves.o
+
+.debug_frame    0x0000000000000000      0x1d4
+ .debug_frame   0x0000000000000000       0xa8 ./build/obj/_unit.o
+ .debug_frame   0x00000000000000a8      0x12c ./build/obj/waves.o
+
+.debug_ranges   0x0000000000000000      0x538
+ .debug_ranges  0x0000000000000000      0x538 ./build/obj/waves.o
+
+Cross Reference Table
+
+Symbol                                            File
+Waves::State::State()                             ./build/obj/waves.o
+Waves::State::State()                             ./build/obj/waves.o
+__init_array_end                                  ./build/obj/_unit.o
+__init_array_start                                ./build/obj/_unit.o
+_bss_end                                          ./build/obj/_unit.o
+_bss_start                                        ./build/obj/_unit.o
+_entry                                            ./build/obj/_unit.o
+_hook_cycle                                       ./build/obj/waves.o
+                                                  ./build/obj/_unit.o
+_hook_init                                        ./build/obj/waves.o
+                                                  ./build/obj/_unit.o
+_hook_mute                                        ./build/obj/_unit.o
+_hook_off                                         ./build/obj/waves.o
+                                                  ./build/obj/_unit.o
+_hook_on                                          ./build/obj/waves.o
+                                                  ./build/obj/_unit.o
+_hook_param                                       ./build/obj/waves.o
+                                                  ./build/obj/_unit.o
+_hook_value                                       ./build/obj/_unit.o
+_osc_white                                        ./build/obj/waves.o
+bitres_lut_f                                      ./build/obj/waves.o
+midi_to_hz_lut_f                                  ./build/obj/waves.o
+tanpi_lut_f                                       ./build/obj/waves.o
+wavesA                                            ./build/obj/waves.o
+wavesB                                            ./build/obj/waves.o
+wavesC                                            ./build/obj/waves.o
+wavesD                                            ./build/obj/waves.o
+wavesE                                            ./build/obj/waves.o
+wavesF                                            ./build/obj/waves.o

@@ -1,0 +1,593 @@
+
+../../build/lfo_test.elf:     file format elf32-littlearm
+
+
+Disassembly of section .text:
+
+20017844 <_text_start>:
+
+__attribute__((weak))
+void _hook_process(const float *main_xn, float *main_yn,
+                   const float *sub_xn, float *sub_yn,
+                   uint32_t frames)
+{
+20017844:	4770      	bx	lr
+
+20017846 <_hook_resume>:
+
+}
+
+__attribute__((weak))
+void _hook_resume(void)
+{
+20017846:	4770      	bx	lr
+
+}
+
+__attribute__((weak))
+void _hook_param(uint8_t index, int32_t value)
+{
+20017848:	4770      	bx	lr
+
+2001784a <_hook_suspend>:
+2001784a:	4770      	bx	lr
+  _hook_init(platform, api);
+}
+
+__attribute__((weak))
+void _hook_init(uint32_t platform, uint32_t api)
+{
+2001784c:	4770      	bx	lr
+
+2001784e <_entry>:
+ * @{
+ */
+
+__attribute__((used))
+void _entry(uint32_t platform, uint32_t api)
+{
+2001784e:	4b10      	ldr	r3, [pc, #64]	; (20017890 <_entry+0x42>)
+20017850:	4a10      	ldr	r2, [pc, #64]	; (20017894 <_entry+0x46>)
+20017852:	e92d 41f0 	stmdb	sp!, {r4, r5, r6, r7, r8, lr}
+20017856:	4688      	mov	r8, r1
+20017858:	4607      	mov	r7, r0
+  // Ensure zero-clear BSS segment
+  uint8_t * __restrict bss_p = (uint8_t *)&_bss_start;
+  const uint8_t * const bss_e = (uint8_t *)&_bss_end;
+
+  for (; bss_p != bss_e;)
+    *(bss_p++) = 0;
+2001785a:	2100      	movs	r1, #0
+{
+  // Ensure zero-clear BSS segment
+  uint8_t * __restrict bss_p = (uint8_t *)&_bss_start;
+  const uint8_t * const bss_e = (uint8_t *)&_bss_end;
+
+  for (; bss_p != bss_e;)
+2001785c:	4293      	cmp	r3, r2
+2001785e:	d002      	beq.n	20017866 <_entry+0x18>
+    *(bss_p++) = 0;
+20017860:	f803 1f01 	strb.w	r1, [r3, #1]!
+20017864:	e7fa      	b.n	2001785c <_entry+0xe>
+20017866:	4b0c      	ldr	r3, [pc, #48]	; (20017898 <_entry+0x4a>)
+20017868:	4c0c      	ldr	r4, [pc, #48]	; (2001789c <_entry+0x4e>)
+2001786a:	1ae4      	subs	r4, r4, r3
+2001786c:	10a4      	asrs	r4, r4, #2
+
+  // Call constructors if any.  
+  const size_t count = __init_array_end - __init_array_start;
+  for (size_t i = 0; i<count; ++i) {
+2001786e:	2500      	movs	r5, #0
+20017870:	461e      	mov	r6, r3
+20017872:	42a5      	cmp	r5, r4
+20017874:	d005      	beq.n	20017882 <_entry+0x34>
+    __init_fptr init_p = (__init_fptr)__init_array_start[i];
+20017876:	f856 3025 	ldr.w	r3, [r6, r5, lsl #2]
+    if (init_p != NULL)
+2001787a:	b103      	cbz	r3, 2001787e <_entry+0x30>
+      init_p();
+2001787c:	4798      	blx	r3
+  for (; bss_p != bss_e;)
+    *(bss_p++) = 0;
+
+  // Call constructors if any.  
+  const size_t count = __init_array_end - __init_array_start;
+  for (size_t i = 0; i<count; ++i) {
+2001787e:	3501      	adds	r5, #1
+20017880:	e7f7      	b.n	20017872 <_entry+0x24>
+    if (init_p != NULL)
+      init_p();
+  }
+  
+  // Call user initialization
+  _hook_init(platform, api);
+20017882:	4641      	mov	r1, r8
+20017884:	4638      	mov	r0, r7
+20017886:	f000 f80b 	bl	200178a0 <_hook_init>
+2001788a:	e8bd 81f0 	ldmia.w	sp!, {r4, r5, r6, r7, r8, pc}
+2001788e:	bf00      	nop
+20017890:	20017b0f 	.word	0x20017b0f
+20017894:	20017b23 	.word	0x20017b23
+20017898:	20017840 	.word	0x20017840
+2001789c:	20017844 	.word	0x20017844
+
+200178a0 <_hook_init>:
+     * Reset phase
+     */
+    inline __attribute__((optimize("Ofast"),always_inline))
+    void reset(void) 
+    {
+      phi0 = 0x80000000;
+200178a0:	4b03      	ldr	r3, [pc, #12]	; (200178b0 <_hook_init+0x10>)
+     * param fsrecip Reciprocal of sampling frequency (1/Fs)
+     */
+    inline __attribute__((optimize("Ofast"),always_inline))
+    void setF0(const float f0, const float fsrecip) 
+    {
+      w0 = f32_to_q31(2.f * f0 * fsrecip);
+200178a2:	4a04      	ldr	r2, [pc, #16]	; (200178b4 <_hook_init+0x14>)
+200178a4:	f04f 4100 	mov.w	r1, #2147483648	; 0x80000000
+200178a8:	e883 0006 	stmia.w	r3, {r1, r2}
+200178ac:	4770      	bx	lr
+200178ae:	bf00      	nop
+200178b0:	20017b10 	.word	0x20017b10
+200178b4:	012c5f92 	.word	0x012c5f92
+
+200178b8 <_hook_process>:
+}
+
+void MODFX_PROCESS(const float *main_xn, float *main_yn,
+                   const float *sub_xn,  float *sub_yn,
+                   uint32_t frames)
+{
+200178b8:	e92d 43f0 	stmdb	sp!, {r4, r5, r6, r7, r8, r9, lr}
+  float * __restrict my = main_yn;
+  const float * my_e = my + 2*frames;
+  float * __restrict sy = sub_yn;
+
+  const float p = s_param;
+200178bc:	4c73      	ldr	r4, [pc, #460]	; (20017a8c <_hook_process+0x1d4>)
+void MODFX_PROCESS(const float *main_xn, float *main_yn,
+                   const float *sub_xn,  float *sub_yn,
+                   uint32_t frames)
+{
+  float * __restrict my = main_yn;
+  const float * my_e = my + 2*frames;
+200178be:	9d07      	ldr	r5, [sp, #28]
+  float * __restrict sy = sub_yn;
+
+  const float p = s_param;
+  float p_z = s_param_z;
+200178c0:	ed94 6a03 	vldr	s12, [r4, #12]
+200178c4:	6827      	ldr	r7, [r4, #0]
+     * Step phase one cycle forward
+     */
+    inline __attribute__((optimize("Ofast"),always_inline))
+    void cycle(void)
+    {
+      phi0 += w0;
+200178c6:	6866      	ldr	r6, [r4, #4]
+{
+  float * __restrict my = main_yn;
+  const float * my_e = my + 2*frames;
+  float * __restrict sy = sub_yn;
+
+  const float p = s_param;
+200178c8:	ed94 3a02 	vldr	s6, [r4, #8]
+    
+    s_lfo.cycle();
+
+    float wave;
+    
+    switch (s_lfo_wave) {
+200178cc:	f894 e010 	ldrb.w	lr, [r4, #16]
+
+/** Linear interpolation
+ */
+static inline __attribute__((optimize("Ofast"), always_inline))
+float linintf(const float fr, const float x0, const float x1) {
+  return x0 + fr * (x1 - x0);
+200178d0:	eddf 2a6f 	vldr	s5, [pc, #444]	; 20017a90 <_hook_process+0x1d8>
+     */
+    inline __attribute__((optimize("Ofast"),always_inline))
+    float square_bi_off(const float offset) 
+    {
+      const q31_t phi = phi0 + (f32_to_q31(offset)<<1);
+      return (phi < 0) ? -1.f : 1.f;
+200178d4:	ed9f 5a6f 	vldr	s10, [pc, #444]	; 20017a94 <_hook_process+0x1dc>
+     */
+    inline __attribute__((optimize("Ofast"),always_inline))
+    float saw_bi_off(const float offset) 
+    {
+      const q31_t phi = phi0 + (f32_to_q31(offset)<<1);
+      return q31_to_f32(phi);
+200178d8:	ed9f 7a6f 	vldr	s14, [pc, #444]	; 20017a98 <_hook_process+0x1e0>
+     * @param offset Offset to apply to current phase, in [-1, 1]
+     */
+    inline __attribute__((optimize("Ofast"),always_inline))
+    float triangle_bi_off(const float offset) 
+    {
+      const q31_t phi = phi0 + f32_to_q31(2*offset);
+200178dc:	ed9f 4a6f 	vldr	s8, [pc, #444]	; 20017a9c <_hook_process+0x1e4>
+     * Get current value of bipolar square wave for current phase
+     */
+    inline __attribute__((optimize("Ofast"),always_inline))
+    float square_bi(void) 
+    {
+      return (phi0 < 0) ? -1.f : 1.f;
+200178e0:	ed9f 2a6f 	vldr	s4, [pc, #444]	; 20017aa0 <_hook_process+0x1e8>
+      wave = s_lfo.square_bi_off(s_param_z);
+      break;
+    }
+    
+    // Scale down the wave, full swing is way too loud. (polyphony headroom)
+    wave *= 0.1f;
+200178e4:	eddf 3a6f 	vldr	s7, [pc, #444]	; 20017aa4 <_hook_process+0x1ec>
+void MODFX_PROCESS(const float *main_xn, float *main_yn,
+                   const float *sub_xn,  float *sub_yn,
+                   uint32_t frames)
+{
+  float * __restrict my = main_yn;
+  const float * my_e = my + 2*frames;
+200178e8:	00ed      	lsls	r5, r5, #3
+200178ea:	eb01 0c05 	add.w	ip, r1, r5
+200178ee:	19f0      	adds	r0, r6, r7
+200178f0:	3308      	adds	r3, #8
+  float * __restrict sy = sub_yn;
+
+  const float p = s_param;
+  float p_z = s_param_z;
+200178f2:	eef0 5a46 	vmov.f32	s11, s12
+200178f6:	eef7 6a00 	vmov.f32	s13, #112	; 0x3f800000  1.0
+200178fa:	eeff 4a00 	vmov.f32	s9, #240	; 0xbf800000 -1.0
+
+__attribute__( ( always_inline ) ) __STATIC_INLINE  int32_t __QSUB( int32_t op1,  int32_t op2)
+{
+  int32_t result;
+
+  __ASM volatile ("qsub %0, %1, %2" : "=r" (result) : "r" (op1), "r" (op2) );
+200178fe:	f04f 4880 	mov.w	r8, #1073741824	; 0x40000000
+  
+  for (; my != my_e; ) {
+20017902:	4561      	cmp	r1, ip
+20017904:	f000 80b9 	beq.w	20017a7a <_hook_process+0x1c2>
+20017908:	ee73 1a65 	vsub.f32	s3, s6, s11
+2001790c:	eee1 5aa2 	vfma.f32	s11, s3, s5
+    
+    s_lfo.cycle();
+
+    float wave;
+    
+    switch (s_lfo_wave) {
+20017910:	f1be 0f0b 	cmp.w	lr, #11
+20017914:	f200 80a2 	bhi.w	20017a5c <_hook_process+0x1a4>
+20017918:	e8df f00e 	tbb	[pc, lr]
+2001791c:	150e0906 	.word	0x150e0906
+20017920:	4a40331c 	.word	0x4a40331c
+20017924:	93846d51 	.word	0x93846d51
+     * Get value of bipolar sine wave for current phase 
+     */
+    inline __attribute__((optimize("Ofast"),always_inline))
+    float sine_bi(void) 
+    {
+      const float phif = q31_to_f32(phi0);
+20017928:	ee07 0a90 	vmov	s15, r0
+2001792c:	e050      	b.n	200179d0 <_hook_process+0x118>
+     * Get current value of bipolar triangle wave for current phase
+     */
+    inline __attribute__((optimize("Ofast"),always_inline))
+    float triangle_bi(void) 
+    {
+      return q31_to_f32(qsub(q31abs(phi0),0x40000000)<<1);
+2001792e:	ea4f 79e0 	mov.w	r9, r0, asr #31
+20017932:	ea80 0209 	eor.w	r2, r0, r9
+20017936:	e069      	b.n	20017a0c <_hook_process+0x154>
+     * Get current value of bipolar saw wave for current phase
+     */
+    inline __attribute__((optimize("Ofast"),always_inline))
+    float saw_bi(void) 
+    {
+      return q31_to_f32(phi0);
+20017938:	ee07 0a90 	vmov	s15, r0
+2001793c:	eef8 7ae7 	vcvt.f32.s32	s15, s15
+20017940:	ee67 7a87 	vmul.f32	s15, s15, s14
+      wave = s_lfo.triangle_bi();
+      break;
+      
+    case k_saw:
+      wave = s_lfo.saw_bi();
+      break;
+20017944:	e08a      	b.n	20017a5c <_hook_process+0x1a4>
+     * Get current value of bipolar square wave for current phase
+     */
+    inline __attribute__((optimize("Ofast"),always_inline))
+    float square_bi(void) 
+    {
+      return (phi0 < 0) ? -1.f : 1.f;
+20017946:	2800      	cmp	r0, #0
+20017948:	bfac      	ite	ge
+2001794a:	eef0 7a66 	vmovge.f32	s15, s13
+2001794e:	eef0 7a64 	vmovlt.f32	s15, s9
+20017952:	e083      	b.n	20017a5c <_hook_process+0x1a4>
+     * Get value of positive unipolar sine wave for current phase 
+     */
+    inline __attribute__((optimize("Ofast"),always_inline))
+    float sine_uni(void) 
+    {
+      const float phif = q31_to_f32(phi0);
+20017954:	ee07 0a90 	vmov	s15, r0
+20017958:	eef8 1ae7 	vcvt.f32.s32	s3, s15
+      return 0.5f + 2 * phif * (si_fabsf(phif) - 1.f);
+2001795c:	eeb0 1a00 	vmov.f32	s2, #0	; 0x40000000  2.0
+     * Get value of positive unipolar sine wave for current phase 
+     */
+    inline __attribute__((optimize("Ofast"),always_inline))
+    float sine_uni(void) 
+    {
+      const float phif = q31_to_f32(phi0);
+20017960:	ee61 7a87 	vmul.f32	s15, s3, s14
+ */
+static inline __attribute__((optimize("Ofast"),always_inline))
+float si_fabsf(float x)
+{
+  f32_t xs = {x};
+  xs.i &= 0x7fffffff;
+20017964:	ee17 2a90 	vmov	r2, s15
+20017968:	f022 4200 	bic.w	r2, r2, #2147483648	; 0x80000000
+2001796c:	ee01 2a90 	vmov	s3, r2
+      return 0.5f + 2 * phif * (si_fabsf(phif) - 1.f);
+20017970:	ee71 1ae6 	vsub.f32	s3, s3, s13
+20017974:	ee61 1aa7 	vmul.f32	s3, s3, s15
+20017978:	eef6 7a00 	vmov.f32	s15, #96	; 0x3f000000  0.5
+2001797c:	eee1 7a81 	vfma.f32	s15, s3, s2
+      wave = s_lfo.square_bi();
+      break;
+      
+    case k_sin_uni:
+      wave = s_lfo.sine_uni();
+      break;
+20017980:	e06c      	b.n	20017a5c <_hook_process+0x1a4>
+20017982:	ee07 0a90 	vmov	s15, r0
+20017986:	eef8 7ae7 	vcvt.f32.s32	s15, s15
+2001798a:	ee67 7a87 	vmul.f32	s15, s15, s14
+2001798e:	ee17 2a90 	vmov	r2, s15
+20017992:	f022 4200 	bic.w	r2, r2, #2147483648	; 0x80000000
+20017996:	ee07 2a90 	vmov	s15, r2
+
+    case k_tri_uni:
+      wave = s_lfo.triangle_uni();
+      break;
+2001799a:	e05f      	b.n	20017a5c <_hook_process+0x1a4>
+
+__attribute__( ( always_inline ) ) __STATIC_INLINE  int32_t __QADD( int32_t op1,  int32_t op2)
+{
+  int32_t result;
+
+  __ASM volatile ("qadd %0, %1, %2" : "=r" (result) : "r" (op1), "r" (op2) );
+2001799c:	1042      	asrs	r2, r0, #1
+2001799e:	fa88 f282 	qadd	r2, r2, r8
+200179a2:	ee07 2a90 	vmov	s15, r2
+     * Get value of positive unipolar saw wave for current phase 
+     */
+    inline __attribute__((optimize("Ofast"),always_inline))
+    float saw_uni(void) 
+    {
+      return q31_to_f32(qadd((phi0>>1),0x40000000));
+200179a6:	eef8 7ae7 	vcvt.f32.s32	s15, s15
+200179aa:	ee67 7a87 	vmul.f32	s15, s15, s14
+
+    case k_saw_uni:
+      wave = s_lfo.saw_uni();
+      break;
+200179ae:	e055      	b.n	20017a5c <_hook_process+0x1a4>
+     * Get current value of bipolar square wave for current phase
+     */
+    inline __attribute__((optimize("Ofast"),always_inline))
+    float square_bi(void) 
+    {
+      return (phi0 < 0) ? -1.f : 1.f;
+200179b0:	2800      	cmp	r0, #0
+200179b2:	bfac      	ite	ge
+200179b4:	eef0 7a66 	vmovge.f32	s15, s13
+200179b8:	eef0 7a42 	vmovlt.f32	s15, s4
+200179bc:	e04e      	b.n	20017a5c <_hook_process+0x1a4>
+     * @param offset Offset to apply to current phase, in [-1, 1]
+     */
+    inline __attribute__((optimize("Ofast"),always_inline))
+    float sine_bi_off(const float offset) 
+    {
+      const float phi = q31_to_f32(phi0 + f32_to_q31(2*offset));
+200179be:	ee66 7a04 	vmul.f32	s15, s12, s8
+200179c2:	eefd 7ae7 	vcvt.s32.f32	s15, s15
+200179c6:	ee17 2a90 	vmov	r2, s15
+200179ca:	4402      	add	r2, r0
+200179cc:	ee07 2a90 	vmov	s15, r2
+200179d0:	eef8 7ae7 	vcvt.f32.s32	s15, s15
+200179d4:	ee67 1a87 	vmul.f32	s3, s15, s14
+200179d8:	ee11 2a90 	vmov	r2, s3
+200179dc:	f022 4200 	bic.w	r2, r2, #2147483648	; 0x80000000
+200179e0:	ee07 2a90 	vmov	s15, r2
+      return 4 * phi * (si_fabsf(phi) - 1.f);
+200179e4:	ee77 7ae6 	vsub.f32	s15, s15, s13
+200179e8:	ee67 7aa1 	vmul.f32	s15, s15, s3
+200179ec:	eef1 1a00 	vmov.f32	s3, #16	; 0x40800000  4.0
+200179f0:	ee67 7aa1 	vmul.f32	s15, s15, s3
+      wave = s_lfo.square_uni();
+      break;
+
+    case k_sin_off:
+      wave = s_lfo.sine_bi_off(s_param_z);
+      break;
+200179f4:	e032      	b.n	20017a5c <_hook_process+0x1a4>
+     * @param offset Offset to apply to current phase, in [-1, 1]
+     */
+    inline __attribute__((optimize("Ofast"),always_inline))
+    float triangle_bi_off(const float offset) 
+    {
+      const q31_t phi = phi0 + f32_to_q31(2*offset);
+200179f6:	ee66 7a04 	vmul.f32	s15, s12, s8
+200179fa:	eefd 7ae7 	vcvt.s32.f32	s15, s15
+200179fe:	ee17 2a90 	vmov	r2, s15
+20017a02:	4402      	add	r2, r0
+      return q31_to_f32(qsub(q31abs(phi),0x40000000)<<1);
+20017a04:	ea4f 79e2 	mov.w	r9, r2, asr #31
+
+__attribute__( ( always_inline ) ) __STATIC_INLINE  int32_t __QSUB( int32_t op1,  int32_t op2)
+{
+  int32_t result;
+
+  __ASM volatile ("qsub %0, %1, %2" : "=r" (result) : "r" (op1), "r" (op2) );
+20017a08:	ea82 0209 	eor.w	r2, r2, r9
+20017a0c:	fa89 f2a2 	qsub	r2, r2, r9
+20017a10:	fa88 f2a2 	qsub	r2, r2, r8
+20017a14:	0052      	lsls	r2, r2, #1
+20017a16:	ee07 2a90 	vmov	s15, r2
+20017a1a:	eef8 7ae7 	vcvt.f32.s32	s15, s15
+20017a1e:	ee67 7a87 	vmul.f32	s15, s15, s14
+
+    case k_tri_off:
+      wave = s_lfo.triangle_bi_off(s_param_z);
+      break;
+20017a22:	e01b      	b.n	20017a5c <_hook_process+0x1a4>
+     */
+    inline __attribute__((optimize("Ofast"),always_inline))
+    float saw_bi_off(const float offset) 
+    {
+      const q31_t phi = phi0 + (f32_to_q31(offset)<<1);
+      return q31_to_f32(phi);
+20017a24:	ee66 7a05 	vmul.f32	s15, s12, s10
+20017a28:	eefd 7ae7 	vcvt.s32.f32	s15, s15
+20017a2c:	ee17 2a90 	vmov	r2, s15
+20017a30:	eb00 0242 	add.w	r2, r0, r2, lsl #1
+20017a34:	ee07 2a90 	vmov	s15, r2
+20017a38:	eef8 7ae7 	vcvt.f32.s32	s15, s15
+20017a3c:	ee67 7a87 	vmul.f32	s15, s15, s14
+
+    case k_saw_off:
+      wave = s_lfo.saw_bi_off(s_param_z);
+      break;
+20017a40:	e00c      	b.n	20017a5c <_hook_process+0x1a4>
+     */
+    inline __attribute__((optimize("Ofast"),always_inline))
+    float square_bi_off(const float offset) 
+    {
+      const q31_t phi = phi0 + (f32_to_q31(offset)<<1);
+      return (phi < 0) ? -1.f : 1.f;
+20017a42:	ee66 7a05 	vmul.f32	s15, s12, s10
+20017a46:	eefd 7ae7 	vcvt.s32.f32	s15, s15
+     * Get current value of bipolar square wave for current phase
+     */
+    inline __attribute__((optimize("Ofast"),always_inline))
+    float square_bi(void) 
+    {
+      return (phi0 < 0) ? -1.f : 1.f;
+20017a4a:	ee17 2a90 	vmov	r2, s15
+20017a4e:	eb10 0242 	adds.w	r2, r0, r2, lsl #1
+20017a52:	bf4c      	ite	mi
+20017a54:	eef0 7a64 	vmovmi.f32	s15, s9
+20017a58:	eef0 7a66 	vmovpl.f32	s15, s13
+      wave = s_lfo.square_bi_off(s_param_z);
+      break;
+    }
+    
+    // Scale down the wave, full swing is way too loud. (polyphony headroom)
+    wave *= 0.1f;
+20017a5c:	ee67 7aa3 	vmul.f32	s15, s15, s7
+20017a60:	4430      	add	r0, r6
+    
+    *(my++) = wave;
+20017a62:	ee17 2a90 	vmov	r2, s15
+20017a66:	f841 2b08 	str.w	r2, [r1], #8
+20017a6a:	3308      	adds	r3, #8
+    *(my++) = wave;
+20017a6c:	ed41 7a01 	vstr	s15, [r1, #-4]
+    *(sy++) = wave;
+20017a70:	ed43 7a04 	vstr	s15, [r3, #-16]
+    *(sy++) = wave;
+20017a74:	ed43 7a03 	vstr	s15, [r3, #-12]
+  float * __restrict sy = sub_yn;
+
+  const float p = s_param;
+  float p_z = s_param_z;
+  
+  for (; my != my_e; ) {
+20017a78:	e743      	b.n	20017902 <_hook_process+0x4a>
+20017a7a:	08ed      	lsrs	r5, r5, #3
+20017a7c:	fb06 7605 	mla	r6, r6, r5, r7
+20017a80:	6026      	str	r6, [r4, #0]
+    *(my++) = wave;
+    *(sy++) = wave;
+    *(sy++) = wave;
+  }
+
+  s_param_z = p_z;
+20017a82:	edc4 5a03 	vstr	s11, [r4, #12]
+20017a86:	e8bd 83f0 	ldmia.w	sp!, {r4, r5, r6, r7, r8, r9, pc}
+20017a8a:	bf00      	nop
+20017a8c:	20017b10 	.word	0x20017b10
+20017a90:	3b03126f 	.word	0x3b03126f
+20017a94:	4f000000 	.word	0x4f000000
+20017a98:	30000000 	.word	0x30000000
+20017a9c:	4f800000 	.word	0x4f800000
+20017aa0:	00000000 	.word	0x00000000
+20017aa4:	3dcccccd 	.word	0x3dcccccd
+
+20017aa8 <_hook_param>:
+}
+
+
+void MODFX_PARAM(uint8_t index, int32_t value)
+{
+  const float valf = q31_to_f32(value);
+20017aa8:	ee07 1a90 	vmov	s15, r1
+20017aac:	eefa 7ae0 	vcvt.f32.s32	s15, s15, #31
+  switch (index) {
+20017ab0:	b110      	cbz	r0, 20017ab8 <_hook_param+0x10>
+20017ab2:	2801      	cmp	r0, #1
+20017ab4:	d019      	beq.n	20017aea <_hook_param+0x42>
+20017ab6:	4770      	bx	lr
+  case k_user_modfx_param_time:
+    s_lfo_wave = si_roundf(valf * (k_wave_count - 1));
+20017ab8:	eeb2 7a06 	vmov.f32	s14, #38	; 0x41300000  11.0
+20017abc:	ee67 7a87 	vmul.f32	s15, s15, s14
+20017ac0:	4a0c      	ldr	r2, [pc, #48]	; (20017af4 <_hook_param+0x4c>)
+{
+  f32_t xs = {x};
+  f32_t ys = {y};
+  
+  xs.i &= 0x7fffffff;
+  xs.i |= ys.i & 0x80000000;
+20017ac2:	ee17 3a90 	vmov	r3, s15
+20017ac6:	f003 4300 	and.w	r3, r3, #2147483648	; 0x80000000
+20017aca:	f043 537c 	orr.w	r3, r3, #1056964608	; 0x3f000000
+20017ace:	ee07 3a10 	vmov	s14, r3
+20017ad2:	ee77 7a87 	vadd.f32	s15, s15, s14
+20017ad6:	eefd 7ae7 	vcvt.s32.f32	s15, s15
+20017ada:	eef8 7ae7 	vcvt.f32.s32	s15, s15
+20017ade:	eefc 7ae7 	vcvt.u32.f32	s15, s15
+20017ae2:	ee17 3a90 	vmov	r3, s15
+20017ae6:	7413      	strb	r3, [r2, #16]
+    break;
+20017ae8:	4770      	bx	lr
+  case k_user_modfx_param_depth:
+    s_param = valf;
+20017aea:	4b02      	ldr	r3, [pc, #8]	; (20017af4 <_hook_param+0x4c>)
+20017aec:	edc3 7a02 	vstr	s15, [r3, #8]
+20017af0:	4770      	bx	lr
+20017af2:	bf00      	nop
+20017af4:	20017b10 	.word	0x20017b10
+
+20017af8 <_GLOBAL__sub_I__hook_init>:
+
+    /**
+     * Default constructor
+     */
+    SimpleLFO(void) :
+      phi0(0x80000000), w0(0)
+20017af8:	4b03      	ldr	r3, [pc, #12]	; (20017b08 <_GLOBAL__sub_I__hook_init+0x10>)
+20017afa:	f04f 4100 	mov.w	r1, #2147483648	; 0x80000000
+20017afe:	2200      	movs	r2, #0
+20017b00:	e883 0006 	stmia.w	r3, {r1, r2}
+20017b04:	4770      	bx	lr
+20017b06:	bf00      	nop
+20017b08:	20017b10 	.word	0x20017b10
